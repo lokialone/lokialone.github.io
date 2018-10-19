@@ -6,7 +6,7 @@
     "version": "3.7.1"
   },
   "scripts": {
-    "build": " hexo deploy && babel .deploy_git --out-dir . --copy-files"
+    "build": " hexo generate && babel public --out-dir . --copy-files"
   },
   "dependencies": {
     "hexo": "^3.7.0",
