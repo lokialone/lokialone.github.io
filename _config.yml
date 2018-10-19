@@ -79,6 +79,6 @@ theme: landscape
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/lokialone/lokialone.github.io.git  #https://bitbucket.org/JohnSmith/johnsmith.bitbucket.io
-  branch: [master] #published
-  message: []  #leave this blank
+  repo: git@github.com:lokialone/lokialone.github.io.git #https://bitbucket.org/JohnSmith/johnsmith.bitbucket.io
+  branch: master #published
+  # message: []  #leave this blank
