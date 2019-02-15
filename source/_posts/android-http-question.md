@@ -1,7 +1,7 @@
 ---
 title: android客户端页面 请求超时自动重发
 date: 2019-02-15 17:42:36
-tags: question bug
+tags: question
 ---
 
 ## 原因

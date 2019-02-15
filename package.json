@@ -6,6 +6,7 @@
     "version": "3.7.1"
   },
   "scripts": {
+    "dev": "hexo serve",
     "build": " hexo generate && babel public --out-dir . --copy-files"
   },
   "dependencies": {
