@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="谏山">
 <meta property="og:description" content="现象安卓机webview里的h5，post请求时间过长时，接口获得的数据是二次或者多次请求后的结果 原因原因如下：由于设置了链接与获取数据的超时时间，客户端在发送数据之后，检测到可能并没有发送成功到后端，这个时候http底层会自动重发请求（注意是Http底层，所以应用端不会知道发送了多次请求）。如果应用端自动重发了多次请求，后端也回复了多次请求，但是前端仅仅会只回复1次请求。 解决方案 所以为了解">
 <meta property="og:locale" content="JavaScript">
-<meta property="og:updated_time" content="2019-02-17T17:33:04.000Z">
+<meta property="og:updated_time" content="2019-02-24T09:09:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="android 请求超时自动重发">
 <meta name="twitter:description" content="现象安卓机webview里的h5，post请求时间过长时，接口获得的数据是二次或者多次请求后的结果 原因原因如下：由于设置了链接与获取数据的超时时间，客户端在发送数据之后，检测到可能并没有发送成功到后端，这个时候http底层会自动重发请求（注意是Http底层，所以应用端不会知道发送了多次请求）。如果应用端自动重发了多次请求，后端也回复了多次请求，但是前端仅仅会只回复1次请求。 解决方案 所以为了解">
@@ -339,7 +339,7 @@
 <li><p>h5端解法方式。主要是解决post 方法返回结果，第一次和第二次不同。采用对结果使用另一个接口查询的方式解决。</p>
 </li>
 </ol>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> postSomething().then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 安卓手机进行查询接口</span></span><br><span class="line">    <span class="keyword">if</span> (isAndroid()) &#123;</span><br><span class="line">        queryResult()</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 根据结果进行处理</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">postSomething().then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 安卓手机进行查询接口</span></span><br><span class="line">    <span class="keyword">if</span> (isAndroid()) &#123;</span><br><span class="line">        queryResult()</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 根据结果进行处理</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -365,6 +365,22 @@
       
       
 
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/28/ramda-lens/" rel="prev" title="ramda lens 理解和使用">
+                ramda lens 理解和使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
 
       
@@ -436,7 +452,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -449,7 +465,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">tags</span>
               
             </div>

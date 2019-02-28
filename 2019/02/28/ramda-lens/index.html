@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="functional,">
 
 
 
@@ -94,14 +94,18 @@
 
 
 
-<meta name="keywords" content="= =# 天天丧">
-<meta property="og:type" content="website">
-<meta property="og:title" content="谏山">
-<meta property="og:url" content="https://lokialone.github.io/index.html">
+<meta name="description" content="Lens 最先诞生于 Haskell。它是函数式 getter 和 setter，用来处理对复杂数据集的操作。 Ramda 中的 lens 接受一个 “getter” 函数和一个 “setter” 函数，然后返回一对象。 可以类比，Object.defineProperty()中的set, get方法，功能上几乎一致。也可以想想 vue 中对computed的值写的set, get方法。 现在我们">
+<meta name="keywords" content="functional">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ramda lens 理解和使用">
+<meta property="og:url" content="https://lokialone.github.io/2019/02/28/ramda-lens/index.html">
 <meta property="og:site_name" content="谏山">
+<meta property="og:description" content="Lens 最先诞生于 Haskell。它是函数式 getter 和 setter，用来处理对复杂数据集的操作。 Ramda 中的 lens 接受一个 “getter” 函数和一个 “setter” 函数，然后返回一对象。 可以类比，Object.defineProperty()中的set, get方法，功能上几乎一致。也可以想想 vue 中对computed的值写的set, get方法。 现在我们">
 <meta property="og:locale" content="JavaScript">
+<meta property="og:updated_time" content="2019-02-28T06:19:06.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="谏山">
+<meta name="twitter:title" content="ramda lens 理解和使用">
+<meta name="twitter:description" content="Lens 最先诞生于 Haskell。它是函数式 getter 和 setter，用来处理对复杂数据集的操作。 Ramda 中的 lens 接受一个 “getter” 函数和一个 “setter” 函数，然后返回一对象。 可以类比，Object.defineProperty()中的set, get方法，功能上几乎一致。也可以想想 vue 中对computed的值写的set, get方法。 现在我们">
 
 
 
@@ -130,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="https://lokialone.github.io/">
+  <link rel="canonical" href="https://lokialone.github.io/2019/02/28/ramda-lens/">
 
 
 
 
 
-  <title>谏山</title>
+  <title>ramda lens 理解和使用 | 谏山</title>
   
 
 
@@ -161,9 +165,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -246,9 +248,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -278,9 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/02/28/ramda-lens/" itemprop="url">ramda lens 理解和使用</a></h1>
+          <h1 class="post-title" itemprop="name headline">ramda lens 理解和使用</h1>
         
 
         <div class="post-meta">
@@ -330,9 +330,7 @@
       
 
       
-        
-          
-            <p>Lens 最先诞生于 Haskell。它是函数式 getter 和 setter，用来处理对复杂数据集的操作。</p>
+        <p>Lens 最先诞生于 Haskell。它是函数式 getter 和 setter，用来处理对复杂数据集的操作。</p>
 <p>Ramda 中的 lens 接受一个 “getter” 函数和一个 “setter” 函数，然后返回一对象。 可以类比，Object.defineProperty()中的set, get方法，功能上几乎一致。也可以想想 vue 中对computed的值写的set, get方法。</p>
 <p>现在我们来解读官网中的lens例子。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//R.prop 为get函数， R.assoc为set函数</span></span><br><span class="line"><span class="keyword">const</span> xLens = R.lens(R.prop(<span class="string">'x'</span>), R.assoc(<span class="string">'x'</span>));</span><br><span class="line"><span class="comment">//R.view lens的配套对象，用来返回lens定义的数据</span></span><br><span class="line">R.view(xLens, &#123;<span class="attr">x</span>: <span class="number">1</span>, <span class="attr">y</span>: <span class="number">2</span>&#125;);            <span class="comment">//=&gt; 1</span></span><br><span class="line"><span class="comment">//R.set lens的配套对象，通过 lens 对数据结构聚焦的部分进行设置。</span></span><br><span class="line"><span class="comment">//并返回一个新对象</span></span><br><span class="line">R.set(xLens, <span class="number">4</span>, &#123;<span class="attr">x</span>: <span class="number">1</span>, <span class="attr">y</span>: <span class="number">2</span>&#125;);          <span class="comment">//=&gt; &#123;x: 4, y: 2&#125;</span></span><br><span class="line"><span class="comment">//R.over lens的配套对象, 对数据结构中被 lens 聚焦的部分进行函数变换。</span></span><br><span class="line">R.over(xLens, R.negate, &#123;<span class="attr">x</span>: <span class="number">1</span>, <span class="attr">y</span>: <span class="number">2</span>&#125;);  <span class="comment">//=&gt; &#123;x: -1, y: 2&#125;</span></span><br></pre></td></tr></table></figure>
@@ -348,8 +346,6 @@
 <li><a href="https://lambda.academy/functional-lenses/" target="_blank" rel="noopener">https://lambda.academy/functional-lenses/</a></li>
 </ol>
 
-          
-        
       
     </div>
     
@@ -364,142 +360,36 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://lokialone.github.io/2019/02/18/android-http-bug/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="lokialone">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="谏山">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/02/18/android-http-bug/" itemprop="url">android 请求超时自动重发</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-18T01:28:46+08:00">
-                2019-02-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/functional/" rel="tag"># functional</a>
           
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>安卓机webview里的h5，post请求时间过长时，接口获得的数据是二次或者多次请求后的结果</p>
-<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>原因如下：由于设置了链接与获取数据的超时时间，客户端在发送数据之后，检测到可能并没有发送成功到后端，这个时候http底层会自动重发请求（注意是Http底层，所以应用端不会知道发送了多次请求）。如果应用端自动重发了多次请求，后端也回复了多次请求，但是前端仅仅会只回复1次请求。</p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><ol>
-<li><p>所以为了解决这个问题，只要在DefaultHttpClient设置如下代码即可解决：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">defaultHttpClient.setHttpRequestRetryHandler(new DefaultHttpRequestRetryHandler(0, false));</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>h5端解法方式。主要是解决post 方法返回结果，第一次和第二次不同。采用对结果使用另一个接口查询的方式解决。</p>
-</li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">postSomething().then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 安卓手机进行查询接口</span></span><br><span class="line">    <span class="keyword">if</span> (isAndroid()) &#123;</span><br><span class="line">        queryResult()</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 根据结果进行处理</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
       
 
       
       
-        <div class="post-eof"></div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/18/android-http-bug/" rel="next" title="android 请求超时自动重发">
+                <i class="fa fa-chevron-left"></i> android 请求超时自动重发
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
       
     </footer>
   </div>
@@ -509,10 +399,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -520,6 +411,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -540,8 +435,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="lokialone">
           <p class="site-author-name" itemprop="name">lokialone</p>
@@ -592,6 +496,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#看起来更有用的lens例子"><span class="nav-number">1.</span> <span class="nav-text">看起来更有用的lens例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">2.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -705,10 +625,10 @@
   
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
 
-  
+
 
   
 
