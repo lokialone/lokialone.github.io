@@ -261,6 +261,132 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://lokialone.github.io/2019/04/03/yet-another-scheme-tutorial/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lokialone">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="谏山">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/04/03/yet-another-scheme-tutorial/" itemprop="url">yet-another-scheme-tutorial</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-03T11:21:33+08:00">
+                2019-04-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>断断续续看完了 yet another scheme. 看这个是为了，学习sicp. 所以本来没打算放过多的经历。但学习过程中倒是已经收获不少</p>
+<p>前很多章，都是基础的知识。基础语法，语句，比较简单。<br>练习有较多的递归。之前写js不怎么写尾递归。在这个课程里，写了个爽。并且在之后遇到js的递归问题都是会先想如何通过尾递归实现。cons表操作和js中对链表的操作异曲同工，很多思路可以借鉴。</p>
+<p>宏(macro)那块应该算是最吸引我的地方了。 js中没有宏的概念，而c的宏，也不过是简单的编译的字符串替换。但是scheme的宏太酷了。可以非常轻松的实现一门自己的语言或者dsl.之后也了解到ruby的宏虽然风格和scheme不一样,但继承了scheme宏的特性。估计日后也是会去看看ruby的设计。仅仅是从<a href="https://draveness.me/dsl" target="_blank" rel="noopener">https://draveness.me/dsl</a> 这篇文章中看到的关于ruby的内容，就已经非常吸引我了。也想尝试在js中实现一下macro，也把这个当成了我之后3个月的okr内容之一。</p>
+<p>宏之后的内容是：继续，惰性求值和非确定性求值。</p>
+<p>继续的概念比较抽象。我的重点关注在Continuation-Passing-Style(CPS)风格的程序编写。原先在js 实现尾递归时知道，有种实现是通过cps来实现，当时，感觉就是把下一次计算的函数当递归函数的参数。感觉scheme也差不多。但还是有些难以适应这种写法… </p>
+<p>惰性求值的概念很简单，到用时在计算，这个概念点和promise差不多。章节中讲述的很多数值计算问题，说实话兴趣不大。包括之后的非确定性求值，没有感受到妙的感觉，日后再战吧。</p>
+<p>好了，又可以开始新的学习之旅。有些想搞视频编辑啊，拍照已经够优秀了。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://lokialone.github.io/2019/03/06/study-think/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -337,7 +463,7 @@
 <p>monad, functor的概念理解的差不多了，但引入到开发过程中的实践到还是没想好。应该是平常太少看到有代码是这样写的，感觉使用也有些不自信。怕增加之后维护项目人的负担吧0.0。说起来函数式编程是为了增加可读性，但讲真，没学过的来看使用容器概念的代码，还是有点难懂吧。脑子里的上下文不一样。</p>
 <p>学了函数式编程很顺利的就被引到了sicp这本“神”教程。大家一致评论很好。我也在入坑中。由于教学语言是lisp的方言scheme, 所有推荐先学习scheme. 所以scheme就是我目前的重头吧。学了1/3进程了，逐渐适应了层层括号的嵌套。心里还是有些急的，所以就翻了sicp, 感觉学完这个要漫长的一个周期，1个月能看完感觉不现实，以我目前的进度来说。</p>
 <p>也有很多人推荐了eopl,  所以这本书我也买了（英文版的感觉更香了）。准备在sicp看完后看。噗噗，大半年要搭进去了~~。希望能够快乐吧。</p>
-<p>也是因为学习周期比较长且内容属于比较内功的东西，所以以后希望是每天按一定时间学习。其他部分还是要分给前端学习的，毕竟面试也不看这些。为了生活，就去看看前端的吧。ㄟ( ▔, ▔ )ㄏ</p>
+<p>也是因为学习周期比较长且内容属于比较内功的东西，所以以后希望是每天按一定时间学习。其他部分还是要分给前端学习的，毕竟面试也不看这些。为了生活。ㄟ( ▔, ▔ )ㄏ</p>
 
           
         
@@ -679,7 +805,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -692,7 +818,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
