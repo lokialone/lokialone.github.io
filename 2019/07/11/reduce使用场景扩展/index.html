@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="functional,">
 
 
 
@@ -94,14 +94,18 @@
 
 
 
-<meta name="keywords" content="= =# 天天丧">
-<meta property="og:type" content="website">
-<meta property="og:title" content="谏山">
-<meta property="og:url" content="https://lokialone.github.io/index.html">
+<meta name="description" content="本文为对 Functional JavaScript: How to use array reduce for more than just numbers的意译和总结。  文章概述或许是受到mdn文档的影响，大家一般想到要用reduce的场景是求和，求乘积。同时在拥有map,filter时，第一时间会优先使用map, filter。。本文列举了5个场景，个人感觉 第四点：将map和filter">
+<meta name="keywords" content="functional">
+<meta property="og:type" content="article">
+<meta property="og:title" content="reduce使用场景扩展">
+<meta property="og:url" content="https://lokialone.github.io/2019/07/11/reduce使用场景扩展/index.html">
 <meta property="og:site_name" content="谏山">
+<meta property="og:description" content="本文为对 Functional JavaScript: How to use array reduce for more than just numbers的意译和总结。  文章概述或许是受到mdn文档的影响，大家一般想到要用reduce的场景是求和，求乘积。同时在拥有map,filter时，第一时间会优先使用map, filter。。本文列举了5个场景，个人感觉 第四点：将map和filter">
 <meta property="og:locale" content="JavaScript">
+<meta property="og:updated_time" content="2019-07-11T02:50:31.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="谏山">
+<meta name="twitter:title" content="reduce使用场景扩展">
+<meta name="twitter:description" content="本文为对 Functional JavaScript: How to use array reduce for more than just numbers的意译和总结。  文章概述或许是受到mdn文档的影响，大家一般想到要用reduce的场景是求和，求乘积。同时在拥有map,filter时，第一时间会优先使用map, filter。。本文列举了5个场景，个人感觉 第四点：将map和filter">
 
 
 
@@ -130,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="https://lokialone.github.io/">
+  <link rel="canonical" href="https://lokialone.github.io/2019/07/11/reduce使用场景扩展/">
 
 
 
 
 
-  <title>谏山 - 自言自语</title>
+  <title>reduce使用场景扩展 | 谏山</title>
   
 
 
@@ -161,9 +165,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -246,9 +248,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -278,9 +280,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/07/11/reduce使用场景扩展/" itemprop="url">reduce使用场景扩展</a></h2>
+          <h2 class="post-title" itemprop="name headline">reduce使用场景扩展</h2>
         
 
         <div class="post-meta">
@@ -330,9 +330,7 @@
       
 
       
-        
-          
-            <blockquote>
+        <blockquote>
 <p>本文为对 <a href="https://jrsinclair.com/articles/2019/functional-js-do-more-with-reduce/" target="_blank" rel="noopener">Functional JavaScript: How to use array reduce for more than just numbers</a>的意译和总结。</p>
 </blockquote>
 <h2 id="文章概述"><a href="#文章概述" class="headerlink" title="文章概述"></a>文章概述</h2><p>或许是受到mdn文档的影响，大家一般想到要用reduce的场景是求和，求乘积。同时在拥有map,filter时，第一时间会优先使用map, filter。<br>。本文列举了5个场景，个人感觉 第四点：将map和filter 方法在一次遍历中执行, 和第五点: 顺序执行异步函数 比较有扩展性。</p>
@@ -358,8 +356,6 @@
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fetchMessages</span>(<span class="params">username</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> fetch(<span class="string">`https://example.com/api/messages/<span class="subst">$&#123;username&#125;</span>`</span>)</span><br><span class="line">        .then(<span class="function"><span class="params">response</span> =&gt;</span> response.json());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getUsername</span>(<span class="params">person</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> person.username;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">chainedFetchMessages</span>(<span class="params">p, username</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// In this function, p is a promise. We wait for it to finish,</span></span><br><span class="line">    <span class="comment">// then run fetchMessages().</span></span><br><span class="line">    <span class="keyword">const</span> obj  = <span class="keyword">await</span> p;</span><br><span class="line">    <span class="keyword">const</span> data = <span class="keyword">await</span> fetchMessages(username);</span><br><span class="line">    <span class="keyword">return</span> &#123; ...obj, [username]: data&#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> msgObj = peopleArr</span><br><span class="line">    .map(getUsername)</span><br><span class="line">    .reduce(chainedFetchMessages, <span class="built_in">Promise</span>.resolve(&#123;&#125;))</span><br><span class="line">    .then(<span class="built_in">console</span>.log);</span><br><span class="line"><span class="comment">// ⦘ &#123;glestrade: [ … ], mholmes: [ … ], iadler: [ … ]&#125;</span></span><br></pre></td></tr></table></figure>
 <p>扩展： <a href="https://jrsinclair.com/articles/2019/how-to-run-async-js-in-parallel-or-sequential/" target="_blank" rel="noopener">How to run async JavaScript functions in sequence or parallel</a><br>自我扩展：<a href="bear://x-callback-url/open-note?id=352A5EF4-CCCC-442A-8DB3-D37EA37FEEFB-16744-00024E75D10FFFC8" target="_blank" rel="noopener">异步函数的顺序执行的几种方式</a></p>
 
-          
-        
       
     </div>
     
@@ -374,265 +370,36 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://lokialone.github.io/2019/04/03/yet-another-scheme-tutorial/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="lokialone">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="谏山">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/04/03/yet-another-scheme-tutorial/" itemprop="url">yet-another-scheme-tutorial</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-03T11:21:33+08:00">
-                2019-04-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/functional/" rel="tag"># functional</a>
           
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>断断续续看完了 yet another scheme. 看这个是为了，学习sicp. 所以本来没打算放过多的经历。但学习过程中倒是已经收获不少</p>
-<p>前很多章，都是基础的知识。基础语法，语句，比较简单。<br>练习有较多的递归。之前写js不怎么写尾递归。在这个课程里，写了个爽。并且在之后遇到js的递归问题都是会先想如何通过尾递归实现。cons表操作和js中对链表的操作异曲同工，很多思路可以借鉴。</p>
-<p>宏(macro)那块应该算是最吸引我的地方了。 js中没有宏的概念，而c的宏，也不过是简单的编译的字符串替换。但是scheme的宏太酷了。可以非常轻松的实现一门自己的语言或者dsl.之后也了解到ruby的宏虽然风格和scheme不一样,但继承了scheme宏的特性。估计日后也是会去看看ruby的设计。仅仅是从<a href="https://draveness.me/dsl" target="_blank" rel="noopener">https://draveness.me/dsl</a> 这篇文章中看到的关于ruby的内容，就已经非常吸引我了。也想尝试在js中实现一下macro，也把这个当成了我之后3个月的okr内容之一。</p>
-<p>宏之后的内容是：继续，惰性求值和非确定性求值。</p>
-<p>继续的概念比较抽象。我的重点关注在Continuation-Passing-Style(CPS)风格的程序编写。原先在js 实现尾递归时知道，有种实现是通过cps来实现，当时，感觉就是把下一次计算的函数当递归函数的参数。感觉scheme也差不多。但还是有些难以适应这种写法… </p>
-<p>惰性求值的概念很简单，到用时在计算，这个概念点和promise差不多。章节中讲述的很多数值计算问题，说实话兴趣不大。包括之后的非确定性求值，没有感受到妙的感觉，日后再战吧。</p>
-<p>好了，又可以开始新的学习之旅。有些想搞视频编辑啊，拍照已经够优秀了。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
       
 
       
       
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
       
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://lokialone.github.io/2019/03/06/study-think/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="lokialone">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="谏山">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/06/study-think/" itemprop="url">19/3月初学习任务的堆积</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-06T10:21:48+08:00">
-                2019-03-06
-              </time>
+              <a href="/2019/04/03/yet-another-scheme-tutorial/" rel="next" title="yet-another-scheme-tutorial">
+                <i class="fa fa-chevron-left"></i> yet-another-scheme-tutorial
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <p>最近想学的东西都点多啊。</p>
-<p>functional light js,  js函数式编程实践指南。 都是刚看完书，但还没系统整理知识点的书。学以致用，也是希望在平常编写代码时，可以使用这些知识点。初步实践过程是， curry,compose, 纯函数概念的加入和使用lamda来辅助。也是因为这部分是大多数人比较好接受的。</p>
-<p>monad, functor的概念理解的差不多了，但引入到开发过程中的实践到还是没想好。应该是平常太少看到有代码是这样写的，感觉使用也有些不自信。怕增加之后维护项目人的负担吧0.0。说起来函数式编程是为了增加可读性，但讲真，没学过的来看使用容器概念的代码，还是有点难懂吧。脑子里的上下文不一样。</p>
-<p>学了函数式编程很顺利的就被引到了sicp这本“神”教程。大家一致评论很好。我也在入坑中。由于教学语言是lisp的方言scheme, 所有推荐先学习scheme. 所以scheme就是我目前的重头吧。学了1/3进程了，逐渐适应了层层括号的嵌套。心里还是有些急的，所以就翻了sicp, 感觉学完这个要漫长的一个周期，1个月能看完感觉不现实，以我目前的进度来说。</p>
-<p>也有很多人推荐了eopl,  所以这本书我也买了（英文版的感觉更香了）。准备在sicp看完后看。噗噗，大半年要搭进去了~~。希望能够快乐吧。</p>
-<p>也是因为学习周期比较长且内容属于比较内功的东西，所以以后希望是每天按一定时间学习。其他部分还是要分给前端学习的，毕竟面试也不看这些。为了生活。ㄟ( ▔, ▔ )ㄏ</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -642,272 +409,11 @@
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://lokialone.github.io/2019/02/28/ramda-lens/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="lokialone">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="谏山">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/02/28/ramda-lens/" itemprop="url">ramda lens 理解和使用</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-28T14:18:34+08:00">
-                2019-02-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Lens 最先诞生于 Haskell。它是函数式 getter 和 setter，用来处理对复杂数据集的操作。</p>
-<p>Ramda 中的 lens 接受一个 “getter” 函数和一个 “setter” 函数，然后返回一对象。 可以类比，Object.defineProperty()中的set, get方法，功能上几乎一致。也可以想想 vue 中对computed的值写的set, get方法。</p>
-<p>现在我们来解读官网中的lens例子。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//R.prop 为get函数， R.assoc为set函数</span></span><br><span class="line"><span class="keyword">const</span> xLens = R.lens(R.prop(<span class="string">'x'</span>), R.assoc(<span class="string">'x'</span>));</span><br><span class="line"><span class="comment">//R.view lens的配套对象，用来返回lens定义的数据</span></span><br><span class="line">R.view(xLens, &#123;<span class="attr">x</span>: <span class="number">1</span>, <span class="attr">y</span>: <span class="number">2</span>&#125;);            <span class="comment">//=&gt; 1</span></span><br><span class="line"><span class="comment">//R.set lens的配套对象，通过 lens 对数据结构聚焦的部分进行设置。</span></span><br><span class="line"><span class="comment">//并返回一个新对象</span></span><br><span class="line">R.set(xLens, <span class="number">4</span>, &#123;<span class="attr">x</span>: <span class="number">1</span>, <span class="attr">y</span>: <span class="number">2</span>&#125;);          <span class="comment">//=&gt; &#123;x: 4, y: 2&#125;</span></span><br><span class="line"><span class="comment">//R.over lens的配套对象, 对数据结构中被 lens 聚焦的部分进行函数变换。</span></span><br><span class="line">R.over(xLens, R.negate, &#123;<span class="attr">x</span>: <span class="number">1</span>, <span class="attr">y</span>: <span class="number">2</span>&#125;);  <span class="comment">//=&gt; &#123;x: -1, y: 2&#125;</span></span><br></pre></td></tr></table></figure>
-<p>上面是lens的基本用法。但其实在更普遍的情况下，lensProp, lensPath的使用频率会更高。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> person = &#123;</span><br><span class="line">  name: <span class="string">'Randy'</span>,</span><br><span class="line">  socialMedia: &#123;</span><br><span class="line">    github: <span class="string">'randycoulman'</span>,</span><br><span class="line">    twitter: <span class="string">'@randycoulman'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> <span class="comment">//不使用lensProp和lensPath，对象取值</span></span><br><span class="line"><span class="keyword">const</span> nameLens = lens(prop(<span class="string">'name'</span>), assoc(<span class="string">'name'</span>))</span><br><span class="line"><span class="keyword">const</span> twitterLens = lens(</span><br><span class="line"> 	path([<span class="string">'socialMedia'</span>, <span class="string">'twitter'</span>]),</span><br><span class="line">  assocPath([<span class="string">'socialMedia'</span>, <span class="string">'twitter'</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用lensProp和lensPath</span></span><br><span class="line"><span class="keyword">const</span> nameLens = lensProp(<span class="string">'name'</span>)</span><br><span class="line"><span class="keyword">const</span> twitterLens = lensPath([<span class="string">'socialMedia'</span>, <span class="string">'twitter'</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">//根据路径设置对象的值，并返回一个新对象</span></span><br><span class="line">R.assocPath([<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>], <span class="number">42</span>, &#123;<span class="attr">a</span>: &#123;<span class="attr">b</span>: &#123;<span class="attr">c</span>: <span class="number">0</span>&#125;&#125;&#125;); <span class="comment">//=&gt; &#123;a: &#123;b: &#123;c: 42&#125;&#125;&#125;</span></span><br></pre></td></tr></table></figure>
-<p>其中对我而言，目前比较有用的是lensPath, 可以避免嵌套取值的校验问题，之前用的解决方案是 facebook的 idx. 显然这个也是一个不错的方案。</p>
-<h2 id="看起来更有用的lens例子"><a href="#看起来更有用的lens例子" class="headerlink" title="看起来更有用的lens例子"></a>看起来更有用的lens例子</h2><p>以下例子，来自参考链接中的第3个。<br>整个程序要做的事情是，是将 华氏温度 转成 摄氏温度。 </p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> temperature = &#123; <span class="attr">fahrenheit</span>: <span class="number">68</span> &#125;</span><br><span class="line"><span class="comment">//华 -&gt; 摄</span></span><br><span class="line"><span class="keyword">const</span> far2cel = <span class="function"><span class="params">far</span> =&gt;</span> (far - <span class="number">32</span>) * (<span class="number">5</span> / <span class="number">9</span>)</span><br><span class="line"><span class="comment">//摄 -&gt; 华</span></span><br><span class="line"><span class="keyword">const</span> cel2far = <span class="function"><span class="params">cel</span> =&gt;</span> (cel * <span class="number">9</span>) / <span class="number">5</span> + <span class="number">32</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> fahrenheit = lensProp(<span class="string">'fahrenheit'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> lcelsius = lens(far2cel, cel2far)</span><br><span class="line"><span class="keyword">const</span> celsius = compose(</span><br><span class="line">  fahrenheit,</span><br><span class="line">  lcelsius</span><br><span class="line">)</span><br><span class="line">view(celsius, temperature) <span class="comment">// 20</span></span><br><span class="line"><span class="keyword">set</span>(celsius, 20, temperature) //&#123; fahrenheit: <span class="number">68</span> &#125;</span><br></pre></td></tr></table></figure>
-<p>lcelsius,  get时把华氏温度作为返回摄氏度。set时把摄氏度转成华氏温度。<br>这样就隐藏了数据转换的过程。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li><a href="https://ramdajs.com/docs/" target="_blank" rel="noopener">https://ramdajs.com/docs/</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/27780023" target="_blank" rel="noopener">Thinking in Ramda: 透镜（Lenses） - 知乎</a></li>
-<li><a href="https://lambda.academy/functional-lenses/" target="_blank" rel="noopener">https://lambda.academy/functional-lenses/</a></li>
-</ol>
-
-          
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://lokialone.github.io/2019/02/18/android-http-bug/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="lokialone">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="谏山">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/02/18/android-http-bug/" itemprop="url">android 请求超时自动重发</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-18T01:28:46+08:00">
-                2019-02-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>安卓机webview里的h5，post请求时间过长时，接口获得的数据是二次或者多次请求后的结果</p>
-<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>原因如下：由于设置了链接与获取数据的超时时间，客户端在发送数据之后，检测到可能并没有发送成功到后端，这个时候http底层会自动重发请求（注意是Http底层，所以应用端不会知道发送了多次请求）。如果应用端自动重发了多次请求，后端也回复了多次请求，但是前端仅仅会只回复1次请求。</p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><ol>
-<li><p>所以为了解决这个问题，只要在DefaultHttpClient设置如下代码即可解决：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">defaultHttpClient.setHttpRequestRetryHandler(new DefaultHttpRequestRetryHandler(0, false));</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>h5端解法方式。主要是解决post 方法返回结果，第一次和第二次不同。采用对结果使用另一个接口查询的方式解决。</p>
-</li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">postSomething().then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 安卓手机进行查询接口</span></span><br><span class="line">    <span class="keyword">if</span> (isAndroid()) &#123;</span><br><span class="line">        queryResult()</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 根据结果进行处理</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
@@ -915,6 +421,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -935,8 +445,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image" src="/avatar.jpg" alt="lokialone">
           <p class="site-author-name" itemprop="name">lokialone</p>
@@ -987,6 +506,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#文章概述"><span class="nav-number">1.</span> <span class="nav-text">文章概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Convert-an-array-to-an-object"><span class="nav-number">1.1.</span> <span class="nav-text">1.Convert an array to an object</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Unfold-to-a-larger-array"><span class="nav-number">1.2.</span> <span class="nav-text">2.Unfold to a larger array;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Make-two-calculations-in-one-traversal"><span class="nav-number">1.3.</span> <span class="nav-text">3. Make two calculations in one traversal</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Combine-mapping-and-filtering-into-one-pass"><span class="nav-number">1.4.</span> <span class="nav-text">4. Combine mapping and filtering into one pass;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-Run-asynchronous-functions-in-sequence"><span class="nav-number">1.5.</span> <span class="nav-text">5. Run asynchronous functions in sequence</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1107,10 +642,10 @@
 
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
 
-  
+
 
   
 
