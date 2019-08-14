@@ -261,6 +261,133 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://lokialone.github.io/2019/08/14/localstorage/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lokialone">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="谏山">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/14/localstorage/" itemprop="url">封装一个响应式的localstorage. (for vue)</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-14T15:37:23+08:00">
+                2019-08-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="不具响应式的封装"><a href="#不具响应式的封装" class="headerlink" title="不具响应式的封装"></a>不具响应式的封装</h2><p>在做业务过程中，常常会需要用到localstrorage.  基本也是使用 <a href="https://www.npmjs.com/package/store" target="_blank" rel="noopener">store  -  npm</a> 兼容性也不错，但常常会出现很多如下代码。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> store <span class="keyword">from</span> store;</span><br><span class="line"><span class="keyword">const</span> key = <span class="string">'xxxx'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">getUsername</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> store.get(key);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">setUsername</span>(<span class="params">v</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> store.set(key, v);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>整个文件的意义，只是一个表格而已，做个简单的映射。 为了去除这种模式的代码。脑子想的是proxy的特性。尝试了一下，做出如下改造<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> store <span class="keyword">from</span> <span class="string">'store'</span>;</span><br><span class="line"><span class="keyword">const</span> preFix = <span class="string">'LK'</span>;</span><br><span class="line"><span class="keyword">const</span> proxy = <span class="keyword">new</span> <span class="built_in">Proxy</span>(&#123;&#125;, &#123;</span><br><span class="line">        <span class="keyword">get</span>: function (target,  property ) &#123;</span><br><span class="line">            <span class="keyword">return</span> store.get(<span class="string">`<span class="subst">$&#123;preFix&#125;</span><span class="subst">$&#123;property&#125;</span>`</span>);</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="keyword">set</span>: function ( target, property, value) &#123;</span><br><span class="line">   		  <span class="keyword">return</span> store.set(<span class="string">`<span class="subst">$&#123;preFix&#125;</span><span class="subst">$&#123;property&#125;</span>`</span>, value);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> proxy;</span><br></pre></td></tr></table></figure></p>
+<p>使用的时候，直接 proxy.username 就好了，不需要再重复的写 getXX, setXX方法。看着挺美好，但之前的方式有个优势是，多人使用的时候，能够知道有哪些 数据是已经被存储使用了。改进后的方法，使用起来方便了一些，但少了一些限制。故做出如下修改:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> store <span class="keyword">from</span> <span class="string">'store'</span>;</span><br><span class="line"><span class="keyword">const</span> localStorage = &#123;</span><br><span class="line">		username: <span class="string">''</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">createProxy</span>(<span class="params">localStorage, preFix=<span class="string">'LK_SOUCHE_'</span></span>) </span>&#123;</span><br><span class="line">    *<span class="comment">// localStorage里声明的才可以使用，达到不瞎搞的目的*</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Proxy</span>(localStorage, &#123;</span><br><span class="line">        <span class="keyword">get</span>: function (target, property ) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!<span class="built_in">Reflect</span>.has(target, property)) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">`请先在localStorge对象里初始化<span class="subst">$&#123;property&#125;</span>`</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> store.get(<span class="string">`<span class="subst">$&#123;preFix&#125;</span><span class="subst">$&#123;property&#125;</span>`</span>);</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="keyword">set</span>: function (target, property, value) &#123;</span><br><span class="line">    </span><br><span class="line">            <span class="keyword">if</span> (!<span class="built_in">Reflect</span>.has(target, property)) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">`请先在localStorge对象里初始化<span class="subst">$&#123;property&#125;</span>`</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> store.set(<span class="string">`<span class="subst">$&#123;preFix&#125;</span><span class="subst">$&#123;property&#125;</span>`</span>, value);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> proxy = createProxy(localStorage);</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> proxy;</span><br></pre></td></tr></table></figure></p>
+<p>使用Reflect 判断对象的属性是否被声明过，防止直接proxy.username方式的使用。</p>
+<h2 id="加入响应式特性"><a href="#加入响应式特性" class="headerlink" title="加入响应式特性"></a>加入响应式特性</h2><p>store 存储的数据不具备响应式特性，但在很多业务场景时，我们需要更改store的数据，同时组件要根据store的变更来改变状态。这个时候我们是无法直接监听到store数据的变更的，为此我们需要引入一个另一个具备响应式的中间变量来做这个事情。为了减少在业务直接出现这些多余变量，使用vue对象来封装 store.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; isEmpty &#125; <span class="keyword">from</span> <span class="string">'ramda'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; createProxy &#125; <span class="keyword">from</span> <span class="string">'./index'</span>;</span><br><span class="line"><span class="keyword">const</span> localStorage = &#123;</span><br><span class="line">    tableHeadExtra: [],</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> proxy = createProxy(localStorage); <span class="comment">//上文出现过的函数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//生成响应式的中间变量</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createVueData</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Object</span>.keys(localStorage).reduce(<span class="function">(<span class="params">*acc*, *key*</span>) =&gt;</span> &#123;</span><br><span class="line">        acc[<span class="string">`<span class="subst">$&#123;key&#125;</span>Data`</span>] = localStorage[key];</span><br><span class="line">        <span class="keyword">return</span> acc;</span><br><span class="line">    &#125;, &#123;&#125;);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//通过中间变量的</span></span><br><span class="line"><span class="keyword">const</span> createComputed = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Object</span>.keys(localStorage).reduce(<span class="function">(<span class="params">acc, key</span>) =&gt;</span> &#123;</span><br><span class="line">        acc[key] = &#123;</span><br><span class="line">            <span class="keyword">set</span>(v) &#123;</span><br><span class="line">                <span class="keyword">this</span>[<span class="string">`<span class="subst">$&#123;key&#125;</span>Data`</span>] = v;</span><br><span class="line">                proxy[key] = v; </span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="keyword">get</span>() &#123;</span><br><span class="line">                <span class="keyword">return</span> isEmpty(<span class="keyword">this</span>[<span class="string">`<span class="subst">$&#123;key&#125;</span>Data`</span>]) ? proxy[key] : <span class="keyword">this</span>[<span class="string">`<span class="subst">$&#123;key&#125;</span>Data`</span>];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> acc;</span><br><span class="line">    &#125;, &#123;&#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">    data: createVueData(),</span><br><span class="line">    computed: createComputed()</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.freeze(store);</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> store;</span><br></pre></td></tr></table></figure>
+<p>Object.freeze的目 也是为了防止随意添加数据， 而数据不会具有响应式特性，减少这个误用。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://lokialone.github.io/2019/07/12/和睡眠的斗争/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -607,7 +734,7 @@
 <p>宏之后的内容是：继续，惰性求值和非确定性求值。</p>
 <p>继续的概念比较抽象。我的重点关注在Continuation-Passing-Style(CPS)风格的程序编写。原先在js 实现尾递归时知道，有种实现是通过cps来实现，当时，感觉就是把下一次计算的函数当递归函数的参数。感觉scheme也差不多。但还是有些难以适应这种写法… </p>
 <p>惰性求值的概念很简单，到用时在计算，这个概念点和promise差不多。章节中讲述的很多数值计算问题，说实话兴趣不大。包括之后的非确定性求值，没有感受到妙的感觉，日后再战吧。</p>
-<p>好了，又可以开始新的学习之旅。有些想搞视频编辑啊，拍照已经够优秀了。</p>
+<p>好了，又可以开始新的学习之旅。</p>
 
           
         
@@ -1074,7 +1201,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
